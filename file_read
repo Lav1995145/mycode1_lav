@@ -1,0 +1,35 @@
+program FileReadWriteExample;
+
+{$APPTYPE CONSOLE}
+
+uses
+  SysUtils;
+
+var
+  FileName: string;
+  FileContent: string;
+  FileHandle: TextFile;
+
+begin
+  // Specify the file name
+  FileName := 'example.txt';
+
+  // Writing to a file
+  AssignFile(FileHandle, FileName);
+  Rewrite(FileHandle);
+  WriteLn(FileHandle, 'Hello, this is a test file.');
+  WriteLn(FileHandle, 'Delphi File I/O example.');
+  CloseFile(FileHandle);
+
+  // Reading from a file
+  AssignFile(FileHandle, FileName);
+  Reset(FileHandle);
+  while not Eof(FileHandle) do
+  begin
+    ReadLn(FileHandle, FileContent);
+    WriteLn(FileContent);
+  end;
+  CloseFile(FileHandle);
+
+  ReadLn; // Wait for user input before closing the program
+end.
