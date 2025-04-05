@@ -37,21 +37,63 @@
 ///
 /// ***************************************************************************
 /// File last update : 04/08/2024 09:03:36
-/// Signature : 30198fdbf79ce553b1d9be4fcae4e27a628d9700
+/// Signature : 145266d58d0bb4171f3029e1b28b32a22b212ea6
 /// ***************************************************************************
 /// </summary>
 
-program EffectsAndAnimations;
+program TListSortSample;
 
-uses
-  System.StartUpCopy,
-  FMX.Forms,
-  fMain in 'fMain.pas' {Form1};
-
+{$APPTYPE CONSOLE}
 {$R *.res}
 
+uses
+  System.SysUtils,
+  System.Generics.Defaults,
+  System.Generics.Collections;
+
+procedure GenericTListSort;
+var
+  i: Integer;
+  liste: tlist<Integer>;
 begin
-  Application.Initialize;
-  Application.CreateForm(TForm1, Form1);
-  Application.Run;
+  randomize;
+
+  liste := tlist<Integer>.create;
+  try
+    for i := 1 to 10 do
+    begin
+      liste.Add(random(1000));
+    end;
+
+    liste.Sort(TComparer<Integer>.Construct(
+      function(const a, b: Integer): Integer
+      begin
+        if a = b then
+          result := 0
+        else if a > b then
+          result := 1
+        else
+          result := -1;
+      end));
+
+    for i in liste do
+    begin
+      writeln(i.ToString);
+    end;
+  finally
+    freeandnil(liste);
+  end;
+end;
+
+begin
+  try
+    GenericTListSort;
+  except
+    on E: Exception do
+      writeln(E.ClassName, ': ', E.Message);
+  end;
+  writeln;
+  writeln('Ctrl+C to close this program.');
+  readln;
+
 end.
